@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.TeamCalen.dao.ScheduleDao">
+	<insert id="insertSchedule" parameterType="com.net.TeamCalen.entity.Schedule">
+		insert schedule (user_id,
+	date,
+	start_hour,
+	start_minute,
+	end_hour,
+	end_minute,
+	schedule_text,
+	schedule_state)
+	values(#{user_id},#{date},#{start_hour},#{start_minute},#{end_hour},#{end_minute},#{schedule_text},#{schedule_state})
+	</insert>
+	<select id="selectSchedulebyusername" parameterType="int">
+		select * from schedule join user on user.user_id=schedule.user_id where username=#{username};
+	</select>
+	<select id="selectSchedulebydate" parameterType="com.net.TeamCalen.entity.Schedule">
+		select * from schedule where date=#{date};
+	</select>
+	<update id="updataSchedulebystate" >
+		update dept <set>schedule_state=#{state} </set> where schedule_id=#{schedule_id};
+	</update>
+	<update id="updataSchedule">
+		update dept
+		<set>
+		user_id=#{user_id},
+	date=#{date},
+	start_hour=#{start_hour},
+	start_minute=#{start_minute},
+	end_hour=#{end_hour},
+	end_minute=#{end_minute},
+	schedule_text=#{schedule_text},
+	schedule_state=#{schedule_state}
+		</set>
+		where schedule_id=#{schedule_id};
+	</update>
+	<delete id="deleteSchedule" parameterType="int">
+		delete from dept where schedule_id=#{schedule_id};
+	</delete>
+</mapper>

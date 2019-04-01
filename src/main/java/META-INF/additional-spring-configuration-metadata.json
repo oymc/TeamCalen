@@ -1,0 +1,77 @@
+{"properties": [
+  {
+    "name": "spring.datasource.initial-size",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initial-size'"
+  },
+  {
+    "name": "spring.datasource.min-idle",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.min-idle'"
+  },
+  {
+    "name": "spring.datasource.max-wait",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.max-wait'"
+  },
+  {
+    "name": "spring.datasource.max-active",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.max-active'"
+  },
+  {
+    "name": "spring.datasource.time-between-eviction-runs-millis",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.time-between-eviction-runs-millis'"
+  },
+  {
+    "name": "spring.datasource.min-evictable-idle-time-millis",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.min-evictable-idle-time-millis'"
+  },
+  {
+    "name": "spring.datasource.validation-query",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.validation-query'"
+  },
+  {
+    "name": "spring.datasource.test-while-idle",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.test-while-idle'"
+  },
+  {
+    "name": "spring.datasource.test-on-borrow",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.test-on-borrow'"
+  },
+  {
+    "name": "spring.datasource.test-on-return",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.test-on-return'"
+  },
+  {
+    "name": "spring.datasource.pool-prepared-statements",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.pool-prepared-statements'"
+  },
+  {
+    "name": "spring.datasource.filters",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.filters'"
+  },
+  {
+    "name": "spring.datasource.max-pool-prepared-statement-per-connection-size",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.max-pool-prepared-statement-per-connection-size'"
+  },
+  {
+    "name": "spring.datasource.use-global-data-source-stat",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.use-global-data-source-stat'"
+  },
+  {
+    "name": "spring.datasource.connection-properties",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.connection-properties'"
+  }
+]}
