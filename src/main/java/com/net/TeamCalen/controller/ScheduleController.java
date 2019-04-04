@@ -53,11 +53,12 @@ public class ScheduleController {
 	public String docreateSchedule(@RequestParam("year" )String year,@RequestParam("month" )String month,@RequestParam("day" )String day,
 			@RequestParam("startHour" )int  startHour,@RequestParam("startMinute" )int startMinute,
 			@RequestParam("endHour" )int endHour,@RequestParam("endMinute" ) int endMinute,
-			@RequestParam("scheduleText" )String scheduleText,@RequestParam("hasReminder" ) String hasReminder) {
+			@RequestParam("scheduleText" )String scheduleText,
+			@RequestParam("hasReminder" ) boolean hasReminder) {
 		String datestr=year+'-'+month+'-'+day;
 		java.sql.Date date=Date.valueOf(datestr);
 		//userid从session中获取
-		scheduleService.insertSchedule(233,date,startHour,startMinute,endHour,endMinute,scheduleText,hasReminder);
+		scheduleService.insertSchedule(233,date,startHour,startMinute,endHour,endMinute,scheduleText,"未取消",hasReminder);
 		return "success";
 	}
 	@GetMapping("/modifySchedule")
