@@ -2,7 +2,7 @@ package com.net.TeamCalen.entity;
 import java.sql.Date;
 public class Schedule {
 	private int schedule_id;
-	private String user_id;
+	private int user_id;
 	private Date date;
 	private int start_hour;
 	private int start_minute;
