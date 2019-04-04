@@ -10,16 +10,17 @@ public class Schedule {
 	private int end_minute;
 	private String schedule_text;
 	private String schedule_state;
+	private boolean hasReminder;
 	public int getSchedule_id() {
 		return schedule_id;
 	}
 	public void setSchedule_id(int schedule_id) {
 		this.schedule_id = schedule_id;
 	}
-	public String getUser_id() {
+	public int getUser_id() {
 		return user_id;
 	}
-	public void setUser_id(String user_id) {
+	public void setUser_id(int user_id) {
 		this.user_id = user_id;
 	}
 	public Date getDate() {
@@ -63,6 +64,12 @@ public class Schedule {
 	}
 	public void setSchedule_state(String schedule_state) {
 		this.schedule_state = schedule_state;
+	}
+	public boolean isHasReminder() {
+		return hasReminder;
+	}
+	public void setHasReminder(boolean hasReminder) {
+		this.hasReminder = hasReminder;
 	}
 	
 }
