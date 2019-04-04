@@ -10,15 +10,17 @@ import com.net.TeamCalen.entity.Schedule;
 
 @Repository
 public interface ScheduleDao {
-	public void insertSchedule(@Param("user_id") int user_id,
+	public void insertSchedule(
+			@Param("user_id") int user_id,
 			@Param("date") Date date,
 			@Param("start_hour") int start_hour,
 			@Param("start_minute") int start_minute,
 			@Param("end_hour") int end_hour,
 			@Param("end_minute") int end_minute,
 			@Param("schedule_text") String schedule_text,
-			@Param("schedule_state") String schedule_state);
-	public List<Schedule> selectSchedulebyusername(@Param("username") String username);
+			@Param("schedule_state") String schedule_state,
+			@Param("hasReminder") boolean hasReminder);
+	public List<Schedule> selectSchedulebyuser_id(@Param("user_id") String user_id);
 	public List<Schedule> selectSchedulebydate(@Param("date") Date date);
 	/**
 	 * 修改状态，从session获取id
