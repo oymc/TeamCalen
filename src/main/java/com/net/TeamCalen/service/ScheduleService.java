@@ -20,12 +20,13 @@ public class ScheduleService {
 			int end_hour,
 			int end_minute,
 			String schedule_text,
-			String schedule_state) {
-	   scheduleDao.insertSchedule(user_id, date, start_hour, start_minute, end_hour, end_minute, schedule_text, schedule_state);
+			String schedule_state,
+			boolean hasReminder) {
+	   scheduleDao.insertSchedule(user_id, date, start_hour, start_minute, end_hour, end_minute, schedule_text, schedule_state,hasReminder);
 	}
-	public List<Schedule> selectSchedulebyusername(String username){
+	public List<Schedule> selectSchedulebyuser_id(String user_id){
 		
-		return scheduleDao.selectSchedulebyusername(username);
+		return scheduleDao.selectSchedulebyuser_id(user_id);
 	}
 	public List<Schedule> selectSchedulebydate(Date date){
 		return scheduleDao.selectSchedulebydate(date);
