@@ -39,12 +39,12 @@ import com.net.TeamCalen.service.ScheduleService;
 public class ScheduleController {
 	@Autowired
 	ScheduleService scheduleService;
-	@GetMapping("/controlPanel/createSchedule")
+	@GetMapping("controlPanel/createSchedule")
 	public String createSchedule() {
-		return  "/controlPanel/createSchedule";
+		return  "controlPanel/createSchedule";
 	}
 	//@RequestMapping("/docreateSchedule")
-	@PostMapping("/controlPanel/docreateSchedule")
+	@PostMapping("controlPanel/docreateSchedule")
 	@ResponseBody
 	public int docreateSchedule(@RequestParam("year" )String year,@RequestParam("month" )String month,@RequestParam("day" )String day,
 			@RequestParam("startHour" )int  startHour,@RequestParam("startMinute" )int startMinute,
@@ -60,9 +60,9 @@ public class ScheduleController {
 		return schedule.getSchedule_id();
 	}
 	//切换日程完成
-	@GetMapping("changeScheduleState")
+	@GetMapping("controlPanel/changeScheduleState")
 	public String changeScheduleState() {
-		return "changeScheduleState";
+		return "controlPanel/changeScheduleState";
 	}
 	/**
 	 * 这里的state用的string,记得改
@@ -70,8 +70,10 @@ public class ScheduleController {
 	 * @param state
 	 * @return
 	 */
-	@PostMapping("dochangeScheduleState")
+	@PostMapping("controlPanel/dochangeScheduleState")
+	@ResponseBody
 	public void dochangeScheduleState(@RequestParam("scheduleId" ) int scheduleId,@RequestParam("state" ) boolean state) {
+		state=true;
 		String stateStr="";
 		if(state==true) {
 			stateStr="finished";
@@ -82,29 +84,32 @@ public class ScheduleController {
 		scheduleService.updateSchedulebystate(scheduleId, stateStr);
 	}
 	//恢复已经被取消的日程
-	@GetMapping("resumeSchedule")
+	@GetMapping("controlPanel/resumeSchedule")
 	public String resumeSchedule() {
-		return "resumeSchedule";
+		return "controlPanel/resumeSchedule";
 	}
-	@PostMapping("doresumeSchedule")
+	@PostMapping("controlPanel/doresumeSchedule")
+	@ResponseBody
 	public void doresumeSchedule(@RequestParam("scheduleId" ) int scheduleId) {
 		scheduleService.updateSchedulebystate(scheduleId, "unfinished");
 	}
 	//取消日程
-		@GetMapping("cancelSchedule")
+		@GetMapping("controlPanel/cancelSchedule")
 		public String cancelSchedule() {
 			return "controlPanel/cancelSchedule";
 		}
-		@PostMapping("docancelSchedule")
+		@PostMapping("controlPanel/docancelSchedule")
+		@ResponseBody
 		public void docancelSchedule(@RequestParam("scheduleId" ) int scheduleId) {
 			scheduleService.updateSchedulebystate(scheduleId, "canceled");
 		}
 	//删除日程
-	@GetMapping("deleteSchedule")
+	@GetMapping("controlPanel/deleteSchedule")
 	public String deleteSchedule() {
-		return "deleteSchedule";
+		return "controlPanel/deleteSchedule";
 	}
-	@PostMapping("dodeleteSchedule")
+	@PostMapping("controlPanel/dodeleteSchedule")
+	@ResponseBody
 	public String dodeleteSchedule(@RequestParam("scheduleId" ) int scheduleId) {
 		if(scheduleService.deleteSchedule(scheduleId)) {
 			return "success";
@@ -112,11 +117,11 @@ public class ScheduleController {
 		else return "fail";
 	}
 	//编辑日程
-	@GetMapping("modifySchedule")
+	@GetMapping("controlPanel/modifySchedule")
 	public String modifySchedule() {
-		return  "modifySchedule";
+		return  "controlPanel/modifySchedule";
 	}
-	@PostMapping("domodifySchedule")
+	@PostMapping("controlPanel/domodifySchedule")
 	@ResponseBody
 	public String domodifySchedule(@RequestParam("id" )int id,@RequestParam("year" )String year,@RequestParam("month" )String month,@RequestParam("day" )String day,
 			@RequestParam("startHour" )int  startHour,@RequestParam("startMinute" )int startMinute,
@@ -132,14 +137,14 @@ public class ScheduleController {
 		return "success";
 	}
 	//根据 ID 返回对应日程信息
-	@GetMapping("getScheduleById")
+	@GetMapping("controlPanel/getScheduleById")
 	@ResponseBody
 	public Map<String, Object> dogetScheduleById(@RequestParam("scheduleId" ) int scheduleId) {
 		Map<String, Object> map=scheduleService.selectSchedulebyscheduleid(scheduleId);
 		return map;
 	}
 	//得到某一天的所有日程
-	@GetMapping("getSchedulesByDay")
+	@GetMapping("controlPanel/getSchedulesByDay")
 	@ResponseBody
 	public List<Map<String,Object>> getSchedulesByDay(HttpServletRequest request){
 		String year=request.getParameter("year");
@@ -151,7 +156,7 @@ public class ScheduleController {
 		return schedate;
 	}
 	//返回用户从今天起到未来的特定条日程
-	@GetMapping("getRecentSchedules")
+	@GetMapping("controlPanel/getRecentSchedules")
 	@ResponseBody
 	public List<Map<String,Object>> getRecentSchedules(HttpServletRequest request){
 		int amount=Integer.parseInt(request.getParameter("amount"));
@@ -162,7 +167,7 @@ public class ScheduleController {
 		return schedate;
 	}
 	//获取指定年月中每一天的日程数量
-	@GetMapping("getEveryDayScheduleAmountInAMonth")
+	@GetMapping("controlPanel/getEveryDayScheduleAmountInAMonth")
 	@ResponseBody
 	public int[] getEveryDayScheduleAmountInAMonth(HttpServletRequest request) {
 		String year=request.getParameter("year");

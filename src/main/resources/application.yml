@@ -26,6 +26,9 @@ spring:
     username: TeamCalen@163.com
     password: timemanagment3
     default-encoding: UTF-8
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
     
 mybatis:
   # 指定全局配置文件位置
