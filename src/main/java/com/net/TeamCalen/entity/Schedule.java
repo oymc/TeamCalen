@@ -1,15 +1,18 @@
 package com.net.TeamCalen.entity;
 import java.sql.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 public class Schedule {
 	private int schedule_id;
 	private int user_id;
+	//@JSONField (format="yyyy-MM-dd HH:mm:ss")
 	private Date date;
 	private int start_hour;
 	private int start_minute;
 	private int end_hour;
 	private int end_minute;
 	private String schedule_text;
-	private String schedule_state;
+	private String state;
 	private boolean hasReminder;
 	public int getSchedule_id() {
 		return schedule_id;
@@ -23,6 +26,7 @@ public class Schedule {
 	public void setUser_id(int user_id) {
 		this.user_id = user_id;
 	}
+	 @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss") 
 	public Date getDate() {
 		return date;
 	}
@@ -59,11 +63,11 @@ public class Schedule {
 	public void setSchedule_text(String schedule_text) {
 		this.schedule_text = schedule_text;
 	}
-	public String getSchedule_state() {
-		return schedule_state;
+	public String getState() {
+		return state;
 	}
-	public void setSchedule_state(String schedule_state) {
-		this.schedule_state = schedule_state;
+	public void setState(String state) {
+		this.state = state;
 	}
 	public boolean isHasReminder() {
 		return hasReminder;
@@ -71,5 +75,32 @@ public class Schedule {
 	public void setHasReminder(boolean hasReminder) {
 		this.hasReminder = hasReminder;
 	}
-	
+	public Schedule(int user_id,Date date,int start_hour,int start_minute,int end_hour,int end_minute,String schedule_text) {
+		//this.schedule_id=0;
+		this.user_id=user_id;
+		this.date=date;
+		this.start_hour=start_hour;
+		this.start_minute=start_minute;
+		this.end_hour=end_hour;
+		this.end_minute=end_minute;
+		this.schedule_text=schedule_text;
+		this.state="未取消";
+		this.hasReminder=true;
+				
+	}
+//	@Override
+//	public String toString() {
+//		return "Schedule{"+
+//	"schedule_id='"+schedule_id+'\''+
+//	",user_id='"+user_id+'\''+
+//	",date='"+date+'\''+
+//	",start_hour='"+start_hour+'\''+
+//	",start_minute'"+start_minute+'\''+
+//	",end_hour'"+end_hour+'\''+
+//	",end_minute'"+end_minute+'\''+
+//	"schedule_text'"+schedule_text+'\''+
+//	",state'"+state+'\''+
+//	",hasReminder'"+hasReminder+'\''+
+//	'}';
+//	}
 }

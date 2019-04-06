@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+ <form name="form" accept-charset="utf-8"  action="domodifySchedule" method="post">
+        <ul >
+            <li>
+                <label  class="input-tips2">年</label>
+                <div class="inputOuter2">
+                    <input type="text" id="year" name="year" maxlength="16" />
+                </div>
+            </li>
+            <li>
+                <label  class="input-tips2">月</label>
+                <div class="inputOuter2">
+                    <input type="text" id="month " name="month" maxlength="16" />
+                </div>
+            </li>
+            <li>
+                <label  class="input-tips2">日</label>
+                <div class="inputOuter2">
+                    <input type="text" id="day" name="day" maxlength="16" />
+                </div>
+            </li>
+            <li>
+                <label class="input-tips3">开始hour：</label>
+                <div >
+                    <input type="number" id="startHour"  name="startHour" maxlength="16"/>
+                </div>
+            </li>
+            <li>
+                <label class="input-tips3">开始minute：</label>
+                <div >
+                    <input type="number" id="startMinute"  name="startMinute" maxlength="16"/>
+                </div>
+            </li>
+            <li>
+                <label class="input-tips5">结束hour：</label>
+                <div >
+                    <input type="number" id="endHour"  name="endHour" maxlength="16"/>
+                </div>
+            </li>
+            <li>
+                <label class="input-tips6">结束minute：</label>
+                <div >
+                    <input type="number" id="endMinute"  name="endMinute" maxlength="16"/>
+                </div>
+            </li>
+            
+            <li>
+                <label class="input-tips7">说明：</label>
+                <div >
+                    <input type="text" id="scheduleText"  name="scheduleText" maxlength="16"/>
+                </div>
+            </li>
+            <!-- 
+            <li>
+                <label class="input-tips8">状态：</label>
+                <div >
+                    <input type="text" id="hasReminder"  name="hasReminder" maxlength="16"/>
+                </div>
+            </li>
+            -->
+            <li>
+                <div >
+                    <input type="submit" value="确定"/>
+                 
+                </div>
+            </li>
+        </ul>
+    </form>
+    <form name=form2,accept-charset="utf-8"  action="/dodeleteSchedule" method="post">
+    <div>
+    <label class="input-tips10">id：</label>
+                <div >
+                    <input type="number" id="id"  name="id" maxlength="16"/>
+                </div>
+                <div >
+                    <input type="submit" value="确定"/>
+                 
+                </div>
+    </div>
+    </form>
+</body>
+</html>

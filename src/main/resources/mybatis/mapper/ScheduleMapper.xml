@@ -1,41 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.net.TeamCalen.dao.ScheduleDao">
-	<insert id="insertSchedule" parameterType="com.net.TeamCalen.entity.Schedule">
-		insert schedule (user_id,
+	<insert id="insertSchedule" parameterType="com.net.TeamCalen.entity.Schedule" useGeneratedKeys="true" keyProperty="schedule_id">
+		insert into schedule (user_id,
 	date,
 	start_hour,
 	start_minute,
 	end_hour,
 	end_minute,
 	schedule_text,
-	schedule_state)
-	values(#{user_id},#{date},#{start_hour},#{start_minute},#{end_hour},#{end_minute},#{schedule_text},#{schedule_state})
+	state,
+	hasReminder)
+	values
+	(#{user_id},
+	#{date},
+	#{start_hour},#{start_minute},#{end_hour},#{end_minute},
+	#{schedule_text},#{state},#{hasReminder});
 	</insert>
-	<select id="selectSchedulebyusername" parameterType="int">
+	<select id="selectSchedulebyuserid" parameterType="int">
 		select * from schedule join user on user.user_id=schedule.user_id where username=#{username};
 	</select>
-	<select id="selectSchedulebydate" parameterType="com.net.TeamCalen.entity.Schedule">
-		select * from schedule where date=#{date};
+	<select id="selectSchedulebydate" resultType="map">
+		select schedule_id as id,Year(date) as year,Month(date) as month,Day(date) as day,start_hour as startHour,start_minute as startMinute,
+				end_hour as endHour,end_minute as endMinute,schedule_text as scheduleText,state as scheduleState
+		 from schedule where date=#{date};
 	</select>
-	<update id="updataSchedulebystate" >
-		update dept <set>schedule_state=#{state} </set> where schedule_id=#{schedule_id};
+	<select id="selectRecentSchedules" resultType="map">
+		select schedule_id as id,Year(date) as year,Month(date) as month,Day(date) as day,start_hour as startHour,start_minute as startMinute,
+				end_hour as endHour,end_minute as endMinute,schedule_text as scheduleText,state as scheduleState
+		 from schedule where date &gt;=#{date} order by date,start_hour,start_minute,end_hour,end_minute ${order} limit #{amount};
+	</select>
+	  
+	<resultMap id="map" type="com.net.TeamCalen.entity.Amount" >
+	<result property="day" column="day" />
+	<result property="scheduleAmount" column="scheduleAmount"/>
+	</resultMap>
+	<select id="getEveryDayScheduleAmountInAMonth" resultMap="map">
+		select day(date) as day,count(*) as scheduleAmount from schedule where DATE_FORMAT(date,'%Y-%m')=#{yearmonth} GROUP BY day(date);
+	</select>
+	<select id="selectSchedulebyscheduleid" parameterType="int" resultType="map">
+		select * from schedule where schedule_id=#{schedule_id};
+	</select>
+	<update id="updateSchedulebystate" >
+		update schedule <set>state=#{param2} </set> where schedule_id=#{param1};
 	</update>
-	<update id="updataSchedule">
-		update dept
+	<update id="updateSchedule">
+		update schedule
 		<set>
-		user_id=#{user_id},
-	date=#{date},
-	start_hour=#{start_hour},
-	start_minute=#{start_minute},
-	end_hour=#{end_hour},
-	end_minute=#{end_minute},
-	schedule_text=#{schedule_text},
-	schedule_state=#{schedule_state}
+	date=#{schedule.date},
+	start_hour=#{schedule.start_hour},
+	start_minute=#{schedule.start_minute},
+	end_hour=#{schedule.end_hour},
+	end_minute=#{schedule.end_minute},
+	schedule_text=#{schedule.schedule_text},
+	state=#{schedule.state}
 		</set>
 		where schedule_id=#{schedule_id};
 	</update>
 	<delete id="deleteSchedule" parameterType="int">
-		delete from dept where schedule_id=#{schedule_id};
+		delete from schedule where schedule_id=#{schedule_id};
 	</delete>
 </mapper>
