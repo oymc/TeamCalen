@@ -1,6 +1,8 @@
 package com.net.TeamCalen.entity;
 import java.sql.Date;
 
+import org.junit.validator.PublicClassValidator;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 public class Schedule {
 	private int schedule_id;
@@ -86,8 +88,17 @@ public class Schedule {
 		this.end_minute=end_minute;
 		this.schedule_text=schedule_text;
 		this.state="unfinished";
-		this.hasReminder=hasReminder;
-				
+		this.hasReminder=hasReminder;	
+	}
+	public Schedule(Date date,int start_hour,int start_minute,int end_hour,int end_minute,String schedule_text,boolean hasReminder) {
+		this.date=date;
+		this.start_hour=start_hour;
+		this.start_minute=start_minute;
+		this.end_hour=end_hour;
+		this.end_minute=end_minute;
+		this.schedule_text=schedule_text;
+		this.state="unfinished";
+		this.hasReminder=hasReminder;	
 	}
 	@Override
 	public String toString() {

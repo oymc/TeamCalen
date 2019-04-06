@@ -39,7 +39,9 @@
 		select day(date) as day,count(*) as scheduleAmount from schedule where DATE_FORMAT(date,'%Y-%m')=#{yearmonth} GROUP BY day(date);
 	</select>
 	<select id="selectSchedulebyscheduleid" parameterType="int" resultType="map">
-		select * from schedule where schedule_id=#{schedule_id};
+		select Year(date) as year,Month(date) as month,Day(date) as day,start_hour as startHour,start_minute as startMinute,
+				end_hour as endHour,end_minute as endMinute,schedule_text as scheduleText,hasReminder
+		 from schedule where schedule_id=#{schedule_id};
 	</select>
 	<update id="updateSchedulebystate" >
 		update schedule <set>state=#{param2} </set> where schedule_id=#{param1};
