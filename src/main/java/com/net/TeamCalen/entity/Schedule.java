@@ -75,7 +75,8 @@ public class Schedule {
 	public void setHasReminder(boolean hasReminder) {
 		this.hasReminder = hasReminder;
 	}
-	public Schedule(int user_id,Date date,int start_hour,int start_minute,int end_hour,int end_minute,String schedule_text) {
+	public Schedule() {}
+	public Schedule(int user_id,Date date,int start_hour,int start_minute,int end_hour,int end_minute,String schedule_text,boolean hasReminder) {
 		//this.schedule_id=0;
 		this.user_id=user_id;
 		this.date=date;
@@ -84,23 +85,23 @@ public class Schedule {
 		this.end_hour=end_hour;
 		this.end_minute=end_minute;
 		this.schedule_text=schedule_text;
-		this.state="未取消";
-		this.hasReminder=true;
+		this.state="unfinished";
+		this.hasReminder=hasReminder;
 				
 	}
-//	@Override
-//	public String toString() {
-//		return "Schedule{"+
-//	"schedule_id='"+schedule_id+'\''+
-//	",user_id='"+user_id+'\''+
-//	",date='"+date+'\''+
-//	",start_hour='"+start_hour+'\''+
-//	",start_minute'"+start_minute+'\''+
-//	",end_hour'"+end_hour+'\''+
-//	",end_minute'"+end_minute+'\''+
-//	"schedule_text'"+schedule_text+'\''+
-//	",state'"+state+'\''+
-//	",hasReminder'"+hasReminder+'\''+
-//	'}';
-//	}
+	@Override
+	public String toString() {
+		return "Schedule{"+
+	"schedule_id='"+schedule_id+'\''+
+	",user_id='"+user_id+'\''+
+	",date='"+date+'\''+
+	",start_hour='"+start_hour+'\''+
+	",start_minute'"+start_minute+'\''+
+	",end_hour'"+end_hour+'\''+
+	",end_minute'"+end_minute+'\''+
+	"schedule_text'"+schedule_text+'\''+
+	",state'"+state+'\''+
+	",hasReminder'"+hasReminder+'\''+
+	'}';
+	}
 }

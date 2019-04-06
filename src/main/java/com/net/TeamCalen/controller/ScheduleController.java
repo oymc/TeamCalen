@@ -17,11 +17,13 @@ import javax.servlet.http.HttpSession;
 import org.apache.coyote.http11.Http11AprProtocol;
 import org.junit.validator.PublicClassValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Producer;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,30 +36,41 @@ import com.net.TeamCalen.entity.Amount;
 import com.net.TeamCalen.entity.Schedule;
 import com.net.TeamCalen.service.ScheduleService;
 
+import net.minidev.json.JSONObject;
+
 @Controller
 //@RequestMapping("controlPanel")
 public class ScheduleController {
 	@Autowired
 	ScheduleService scheduleService;
-	@GetMapping("controlPanel/createSchedule")
-	public String createSchedule() {
-		return  "controlPanel/createSchedule";
-	}
+//	@GetMapping("controlPanel/createSchedule")
+//	public String createSchedule() {
+//		return  "controlPanel/createSchedule";
+//	}
 	//@RequestMapping("/docreateSchedule")
-	@PostMapping("controlPanel/docreateSchedule")
+	@PostMapping("controlPanel/createSchedule")
 	@ResponseBody
-	public int docreateSchedule(@RequestParam("year" )String year,@RequestParam("month" )String month,@RequestParam("day" )String day,
-			@RequestParam("startHour" )int  startHour,@RequestParam("startMinute" )int startMinute,
-			@RequestParam("endHour" )int endHour,@RequestParam("endMinute" ) int endMinute,
-			@RequestParam("scheduleText" )String scheduleText
-//			@RequestParam("hasReminder" ) boolean hasReminder
-			) {
+	public void docreateSchedule(@RequestBody JSONObject jsonObject) {
+		//userid从session中获取
+//		HttpSession session=request.getSession();
+//		int user_id=(int)session.getAttribute("user_id");
+		String year=jsonObject.getAsString("year");
+		String month=jsonObject.getAsString("month");
+		String day=jsonObject.getAsString("day");
 		String datestr=year+'-'+month+'-'+day;
 		java.sql.Date date=Date.valueOf(datestr);
-		Schedule schedule=new Schedule(233, date, startHour, startMinute, endHour, endMinute, scheduleText);
-		//userid从session中获取
-		scheduleService.insertSchedule(schedule);
-		return schedule.getSchedule_id();
+		int startHour=(int) jsonObject.getAsNumber("startHour");
+		int startMinute=(int) jsonObject.getAsNumber("startMinute");
+		int endHour=(int) jsonObject.getAsNumber("endHour");
+		int endMinute=(int) jsonObject.getAsNumber("endMinute");
+		String scheduleText=jsonObject.getAsString("scheduleText");
+		boolean hasReminder=false;
+		if(jsonObject.getAsString("hasReminder")=="true"){
+				hasReminder=true;
+		}
+		Schedule schedule=new Schedule(233,date,startHour,startMinute,endHour,endMinute,scheduleText,hasReminder);
+//		schedule.setUser_id(233);
+	scheduleService.insertSchedule(schedule);
 	}
 	//切换日程完成
 	@GetMapping("controlPanel/changeScheduleState")
@@ -72,8 +85,9 @@ public class ScheduleController {
 	 */
 	@PostMapping("controlPanel/dochangeScheduleState")
 	@ResponseBody
-	public void dochangeScheduleState(@RequestParam("scheduleId" ) int scheduleId,@RequestParam("state" ) boolean state) {
-		state=true;
+	public void dochangeScheduleState(@RequestBody  Map<String,Object> map) {
+		int scheduleId=Integer.parseInt((String) map.get("scheduleId"));
+		boolean state=(boolean) map.get("state");
 		String stateStr="";
 		if(state==true) {
 			stateStr="finished";
@@ -126,12 +140,12 @@ public class ScheduleController {
 	public String domodifySchedule(@RequestParam("id" )int id,@RequestParam("year" )String year,@RequestParam("month" )String month,@RequestParam("day" )String day,
 			@RequestParam("startHour" )int  startHour,@RequestParam("startMinute" )int startMinute,
 			@RequestParam("endHour" )int endHour,@RequestParam("endMinute" ) int endMinute,
-			@RequestParam("scheduleText" )String scheduleText
-//			@RequestParam("hasReminder" ) boolean hasReminder
+			@RequestParam("scheduleText" )String scheduleText,
+			@RequestParam("hasReminder" ) boolean hasReminder
 			) {
 		String datestr=year+'-'+month+'-'+day;
 		java.sql.Date date=Date.valueOf(datestr);
-		Schedule schedule=new Schedule(233, date, startHour, startMinute, endHour, endMinute, scheduleText);
+		Schedule schedule=new Schedule(233, date, startHour, startMinute, endHour, endMinute, scheduleText,hasReminder);
 		//userid从session中获取
 		scheduleService.updateSchedule(id, schedule);
 		return "success";
