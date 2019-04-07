@@ -26,7 +26,7 @@ public class ScheduleService {
 //			boolean hasReminder) {
 //	   scheduleDao.insertSchedule(user_id, date, start_hour, start_minute, end_hour, end_minute, schedule_text, state,hasReminder);
 //	}
-	public boolean insertSchedule(Schedule schedule) {
+	public Schedule insertSchedule(Schedule schedule) {
 		return scheduleDao.insertSchedule(schedule);
 	}
 	public List<Schedule> selectSchedulebyuser_id(String user_id){

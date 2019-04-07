@@ -22,7 +22,7 @@ public interface ScheduleDao {
 //			@Param("schedule_text") String schedule_text,
 //			@Param("state") String state,
 //			@Param("hasReminder") boolean hasReminder);
-	public boolean insertSchedule(Schedule schedule);
+	public Schedule insertSchedule(Schedule schedule);
 	public List<Schedule> selectSchedulebyuser_id(@Param("user_id") String user_id);
 	public List<Map<String, Object>> selectSchedulebydate(@Param("date") Date date);
 	public Map<String, Object> selectSchedulebyscheduleid(@Param("schedule_id") int schedule_id);
