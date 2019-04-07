@@ -15,7 +15,7 @@ public class UserService {
 		return userDao.inserUser(user);
 	}
     public User selectUser(String username,String password) {
-    	System.out.println(username+" "+username);
+//    	System.out.println(username+" "+username);
     	return userDao.selectUser(username, password);
     }
 //    public User selectUserbymailbox(String email) {

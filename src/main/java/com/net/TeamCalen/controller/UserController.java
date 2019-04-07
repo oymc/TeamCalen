@@ -2,6 +2,8 @@ package com.net.TeamCalen.controller;
 
 import java.util.Map;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -59,7 +61,7 @@ public class UserController {
 		JSONObject json=new JSONObject();
 		try {
 			String receiver=jsonObject.getAsString("email");
-			System.out.println(receiver);
+//			System.out.println(receiver);
 			String sender ="TeamCalen@163.com";
 			String title="TeamCalen注册";
 			String code=String.valueOf(new Random().nextInt(899999)+100000);
@@ -71,6 +73,7 @@ public class UserController {
 			}
 			HttpSession session=request.getSession();
 			session.setAttribute("verificationCode", code);
+			this.removeAttrbute(session, "verificationCode");
 //			System.out.println(session.getAttribute("verificationCode"));
 		}catch (Exception e) {
 			// TODO: handle exception
@@ -114,5 +117,17 @@ public class UserController {
 		json.put("code", 200);
 		json.put("data", null);
 		return json;
+	}
+	private void removeAttrbute(final HttpSession session,final String verificationCode) {
+		final Timer timer=new Timer();
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				// 5分钟后删除session中的验证码
+				session.removeAttribute(verificationCode);
+				timer.cancel();
+			}
+		},5*60*1000);
 	}
 }
