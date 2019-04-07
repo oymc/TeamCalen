@@ -112,8 +112,8 @@ public class ScheduleController {
 	//编辑日程
 	@PostMapping("controlPanel/modifySchedule")
 	@ResponseBody
-	public void domodifySchedule(@RequestBody  JSONObject jsonObject) {
-		int scheduleId=(int) jsonObject.getAsNumber("scheduleId");
+	public Schedule domodifySchedule(@RequestBody  JSONObject jsonObject) {
+		int scheduleId=(int) jsonObject.getAsNumber("id");
 		String year=jsonObject.getAsString("year");
 		String month=jsonObject.getAsString("month");
 		String day=jsonObject.getAsString("day");
@@ -128,25 +128,29 @@ public class ScheduleController {
 		if(jsonObject.getAsString("hasReminder").equals("true")){
 				hasReminder=true;
 		}
-		Schedule schedule=new Schedule(date, startHour, startMinute, endHour, endMinute, scheduleText,hasReminder);
+		int user_id=233;
+		Schedule schedule=new Schedule(scheduleId,user_id,date, startHour, startMinute, endHour, endMinute, scheduleText,hasReminder);
 		//userid从session中获取
-		scheduleService.updateSchedule(scheduleId, schedule);
+		scheduleService.updateSchedule(schedule);
+		return schedule;
 	}
 	//根据 ID 返回对应日程信息
 	@GetMapping("controlPanel/getScheduleById")
 	@ResponseBody
-	public Map<String, Object> dogetScheduleById(@RequestBody  JSONObject jsonObject) {
-		int scheduleId=(int) jsonObject.getAsNumber("scheduleId");
+	public JSONObject dogetScheduleById(@RequestParam("scheduleId") int scheduleId) {
+//		int scheduleId=(int) jsonObject.getAsNumber("scheduleId");
+//		int scheduleId=schedule.getSchedule_id();
 		Map<String, Object> map=scheduleService.selectSchedulebyscheduleid(scheduleId);
-		return map;
+		JSONObject jsonMap=new JSONObject(map);
+		return jsonMap;
 	}
 	//得到某一天的所有日程
 	@GetMapping("controlPanel/getSchedulesByDay")
 	@ResponseBody
-	public List<Map<String,Object>> getSchedulesByDay(@RequestBody  JSONObject jsonObject){
-		String year=jsonObject.getAsString("year");
-		String month=jsonObject.getAsString("month");
-		String day=jsonObject.getAsString("day");
+	public List<Map<String,Object>> getSchedulesByDay(@RequestParam("year") String year,@RequestParam("month") String month,@RequestParam("day") String day){
+//		String year=jsonObject.getAsString("year");
+//		String month=jsonObject.getAsString("month");
+//		String day=jsonObject.getAsString("day");
 		String datestr=year+'-'+month+'-'+day;
 		java.sql.Date date=Date.valueOf(datestr);		
 		List<Map<String, Object>> schedate=scheduleService.selectSchedulebydate(date);
@@ -155,8 +159,8 @@ public class ScheduleController {
 	//返回用户从今天起到未来的特定条日程
 	@GetMapping("controlPanel/getRecentSchedules")
 	@ResponseBody
-	public List<Map<String,Object>> getRecentSchedules(@RequestBody  JSONObject jsonObject){
-		int amount=(int) jsonObject.getAsNumber("amount");
+	public List<Map<String,Object>> getRecentSchedules(@RequestParam("amount") int amount){
+//		int amount=(int) jsonObject.getAsNumber("amount");
 		java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
 		List<Map<String, Object>> schedate=scheduleService.selectRecentSchedules(date,"ASC",amount);
 		return schedate;
@@ -164,9 +168,9 @@ public class ScheduleController {
 	//获取指定年月中每一天的日程数量
 	@GetMapping("controlPanel/getEveryDayScheduleAmountInAMonth")
 	@ResponseBody
-	public int[] getEveryDayScheduleAmountInAMonth(@RequestBody  JSONObject jsonObject) {
-		String year=jsonObject.getAsString("year");
-		String month=jsonObject.getAsString("month");
+	public int[] getEveryDayScheduleAmountInAMonth(@RequestParam("year") String year,@RequestParam("month") String month) {
+//		String year=jsonObject.getAsString("year");
+//		String month=jsonObject.getAsString("month");
 		String yearmonth=year+'-'+month;
 		Calendar calendar=Calendar.getInstance();
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyymm");

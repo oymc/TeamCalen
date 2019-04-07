@@ -90,7 +90,9 @@ public class Schedule {
 		this.state="unfinished";
 		this.hasReminder=hasReminder;	
 	}
-	public Schedule(Date date,int start_hour,int start_minute,int end_hour,int end_minute,String schedule_text,boolean hasReminder) {
+	public Schedule(int schedule_id,int user_id,Date date,int start_hour,int start_minute,int end_hour,int end_minute,String schedule_text,boolean hasReminder) {
+		this.schedule_id=schedule_id;
+		this.user_id=user_id;
 		this.date=date;
 		this.start_hour=start_hour;
 		this.start_minute=start_minute;

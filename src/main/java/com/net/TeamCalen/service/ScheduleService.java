@@ -48,8 +48,8 @@ public class ScheduleService {
 	public boolean updateSchedulebystate(int schedule_id,String state) {
 		return scheduleDao.updateSchedulebystate(schedule_id, state);
 	}
-	public boolean updateSchedule(int schedule_id,Schedule schedule) {
-		return scheduleDao.updateSchedule(schedule_id, schedule);
+	public boolean updateSchedule(Schedule schedule) {
+		return scheduleDao.updateSchedule(schedule);
 	}
 	public boolean deleteSchedule(int schedule_id) {
 		return scheduleDao.deleteSchedule(schedule_id);

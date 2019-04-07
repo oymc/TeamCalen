@@ -57,7 +57,7 @@
 	schedule_text=#{schedule.schedule_text},
 	state=#{schedule.state}
 		</set>
-		where schedule_id=#{schedule_id};
+		where schedule_id=#{schedule.schedule_id};
 	</update>
 	<delete id="deleteSchedule" parameterType="int">
 		delete from schedule where schedule_id=#{schedule_id};

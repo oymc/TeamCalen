@@ -35,7 +35,7 @@ public interface ScheduleDao {
 	 * @return
 	 */
 	public boolean updateSchedulebystate(@Param("schedule_id") int schedule_id,@Param("state") String state);
-	public boolean updateSchedule(@Param("schedule_id") int schedule_id,@Param("schedule") Schedule schedule);
+	public boolean updateSchedule(@Param("schedule") Schedule schedule);
 	public boolean deleteSchedule(@Param("schedule_id") int schedule_id);
 //	public Schedule selectSchedulenum(@Param("date") Date date);
 }
