@@ -48,7 +48,7 @@ public class ScheduleController {
 	public JSONObject docreateSchedule(@RequestBody JSONObject jsonObject,HttpServletRequest request) {
 		//userid从session中获取
 		HttpSession session=request.getSession();
-		int user_id=(int)session.getAttribute("user_id");
+//		int user_id=(int)session.getAttribute("user_id");
 		String year=jsonObject.getAsString("year");
 		String month=jsonObject.getAsString("month");
 		String day=jsonObject.getAsString("day");
@@ -63,12 +63,11 @@ public class ScheduleController {
 		if(jsonObject.getAsString("hasReminder").equals("true")){
 				hasReminder=true;
 		}
-		Schedule schedule=new Schedule(user_id,date,startHour,startMinute,endHour,endMinute,scheduleText,hasReminder);
+		Schedule schedule=new Schedule(233,date,startHour,startMinute,endHour,endMinute,scheduleText,hasReminder);
 		JSONObject jsonObject2 = new JSONObject();
-		Schedule schedule2=scheduleService.insertSchedule(schedule);
-		int scheduleId=schedule2.getSchedule_id();
-		session.setAttribute("scheduleId", scheduleId);
-	  if(schedule!=null) {
+//		int scheduleId=schedule.getSchedule_id();
+//		session.setAttribute("scheduleId", scheduleId);
+	  if(scheduleService.insertSchedule(schedule)) {
 		jsonObject2.put("code", 200);
 		jsonObject2.put("data", null);
 	   }
@@ -76,6 +75,9 @@ public class ScheduleController {
 		jsonObject2.put("code", 400);
 		jsonObject2.put("data", null);
 	   }
+	  int scheduleId=schedule.getSchedule_id();
+	  session.setAttribute("scheduleId", scheduleId);
+//	  System.out.print(scheduleId);
 	   return jsonObject2;
 	}
 	//切换日程完成
