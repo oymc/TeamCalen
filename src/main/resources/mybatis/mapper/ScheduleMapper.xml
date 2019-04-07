@@ -55,7 +55,8 @@
 	end_hour=#{schedule.end_hour},
 	end_minute=#{schedule.end_minute},
 	schedule_text=#{schedule.schedule_text},
-	state=#{schedule.state}
+	state=#{schedule.state},
+	hasReminder=#{schedule.hasReminder}
 		</set>
 		where schedule_id=#{schedule.schedule_id};
 	</update>
