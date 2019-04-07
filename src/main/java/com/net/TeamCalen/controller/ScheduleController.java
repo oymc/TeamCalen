@@ -45,10 +45,10 @@ public class ScheduleController {
 	ScheduleService scheduleService;
 	@PostMapping("controlPanel/createSchedule")
 	@ResponseBody
-	public void docreateSchedule(@RequestBody JSONObject jsonObject) {
+	public void docreateSchedule(@RequestBody JSONObject jsonObject,HttpServletRequest request) {
 		//userid从session中获取
-//		HttpSession session=request.getSession();
-//		int user_id=(int)session.getAttribute("user_id");
+		HttpSession session=request.getSession();
+		int user_id=(int)session.getAttribute("user_id");
 		String year=jsonObject.getAsString("year");
 		String month=jsonObject.getAsString("month");
 		String day=jsonObject.getAsString("day");
@@ -63,7 +63,7 @@ public class ScheduleController {
 		if(jsonObject.getAsString("hasReminder").equals("true")){
 				hasReminder=true;
 		}
-		Schedule schedule=new Schedule(233,date,startHour,startMinute,endHour,endMinute,scheduleText,hasReminder);
+		Schedule schedule=new Schedule(user_id,date,startHour,startMinute,endHour,endMinute,scheduleText,hasReminder);
 //		schedule.setUser_id(233);
 	scheduleService.insertSchedule(schedule);
 	}
@@ -112,7 +112,7 @@ public class ScheduleController {
 	//编辑日程
 	@PostMapping("controlPanel/modifySchedule")
 	@ResponseBody
-	public Schedule domodifySchedule(@RequestBody  JSONObject jsonObject) {
+	public void domodifySchedule(@RequestBody  JSONObject jsonObject) {
 		int scheduleId=(int) jsonObject.getAsNumber("id");
 		String year=jsonObject.getAsString("year");
 		String month=jsonObject.getAsString("month");
@@ -128,11 +128,10 @@ public class ScheduleController {
 		if(jsonObject.getAsString("hasReminder").equals("true")){
 				hasReminder=true;
 		}
-		int user_id=233;
-		Schedule schedule=new Schedule(scheduleId,user_id,date, startHour, startMinute, endHour, endMinute, scheduleText,hasReminder);
+//		int user_id=233;
+		Schedule schedule=new Schedule(scheduleId,0,date, startHour, startMinute, endHour, endMinute, scheduleText,hasReminder);
 		//userid从session中获取
 		scheduleService.updateSchedule(schedule);
-		return schedule;
 	}
 	//根据 ID 返回对应日程信息
 	@GetMapping("controlPanel/getScheduleById")
