@@ -11,7 +11,7 @@ public interface UserDao {
 	 * @param password
 	 * @param email
 	 */
-	public void inserUser(@Param("username") String username,@Param("password") String password,@Param("email") String email);
+	public boolean inserUser(@Param("user") User user);
 	
 	/**
 	 * 登录
@@ -19,7 +19,9 @@ public interface UserDao {
 	 * @param password
 	 * @return user
 	 */
-	public User selectUserbyname(@Param("username") String username,@Param("password") String password);
+	public User selectUser(@Param("username") String username,@Param("password") String password);
+	
+	public String selectEmailbyName(@Param("username") String username);
 	
 //	public User selectUser(@Param("userid") String userid,@Param("password") String password,@Param("email") String email);
 	/**
@@ -27,5 +29,5 @@ public interface UserDao {
 	 * @param username
 	 * @return email
 	 */
-	public String selectUserbyusername(@Param("username") String username);
+	public String selectUserbyname(@Param("username") String username);
 }

@@ -1,92 +1,118 @@
 package com.net.TeamCalen.controller;
 
 import java.util.Map;
+import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.net.TeamCalen.entity.User;
+import com.net.TeamCalen.service.SendByEmailTools;
 import com.net.TeamCalen.service.UserService;
+
+import ch.qos.logback.core.net.LoginAuthenticator;
+import net.minidev.json.JSONObject;
 
 @Controller
 public class UserController {
 	@Autowired
 	private UserService userService;
-	@RequestMapping("/login")
-	public String login()
-	{
-		return "login";
-	}
-	@RequestMapping("/signUp")
-	public String regist()
-	{
-		return "signUp";
-	}
-	@RequestMapping("/retrievePassword")
-	public String retrievePassword()
-	{
-		return "retrievePassword";
-	}
-	@RequestMapping("/dologin")
+	@Autowired
+	private SendByEmailTools sendbyEmailTools;
+	@PostMapping("account/login")
 	@ResponseBody
-	public String dologin(User user,Map<String,Object> map){
-		User user1=userService.selectUserbyname(user.getUsername(),user.getPassword());
-//		User user1=userService.selectUser(user.getUsername(),user.getPassword(),user.getMailbox());
-		System.out.println(user1);
-		if(user1==null) {
-			map.put("msg", "账号或密码错误");
-			return "fail";
-		}
-		else {
-			map.put("msg", "登录成功");
-			return "success";
-		}
-	}
-	@RequestMapping("/dosignUp")
-	public String doregist(User user,Map<String,Object> map) {
-		boolean user_re=userService.inserUser(user.getUsername(), user.getPassword(), user.getEmail());
-		if(user_re) {
-			map.put("msg", "注册成功");
-			return "success";
-		}
-		else {
-			map.put("msg", "用户名重复");
-			return "fail";
-		}
-	}
-	@RequestMapping("/doretrievePassword")
-	public String doretrievePassword(User user)
+	public JSONObject login(@RequestBody  JSONObject jsonObject,HttpServletRequest request)
 	{
-		if(userService.selectUserbyusername(user.getUsername())==null)
-		{
-			return null;
+		JSONObject json=new JSONObject();
+		try {
+			String username=jsonObject.getAsString("username");
+			String password=jsonObject.getAsString("password");
+			if(userService.selectUser(username, password)!=null) {
+				HttpSession session=request.getSession();
+				session.setAttribute("username", username);
+				session.setAttribute("password", password);
+				json.put("code", 200);
+				json.put("data", null);
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			json.put("code", 400);
+			json.put("data", null);
 		}
-		else {
-			//给邮箱发验证码
-			//根据前台数据判断验证码并更新数据库
-			return null;
-		}
-		
+		return json;
 	}
-//	@RequestMapping("/doregist")
-//    public String doRegist(User user,Map<String,Object> map) {
-//        userService.inserUser(user.getUsername(), user.getPassword(),user.getMailbox());
-//        map.put("msg","注册成功");
-//        return "success";
-//    }
-//	@RequestMapping("/dofind")
-//	public String dofind(User user,Map<String,Object> map) {
-//		User user1=userService.selectUserbymailbox(user.getMailbox());
-//		System.out.println(user1);
-//		if(user1==null) {
-//			map.put("msg", "邮箱错误");
-//			return "fail";
-//		}
-//		else {
-//			map.put("msg", "成功");
-//			return "success";
-//		}
-//	}
+	//向指定邮箱发送验证码
+	@PostMapping("account/sendVerificationCodeByEmail")
+	@ResponseBody
+	public JSONObject sendVerificationCodeByEmail(@RequestBody  JSONObject jsonObject,HttpServletRequest request) {
+		JSONObject json=new JSONObject();
+		try {
+			String receiver=jsonObject.getAsString("email");
+			System.out.println(receiver);
+			String sender ="TeamCalen@163.com";
+			String title="TeamCalen注册";
+			String code=String.valueOf(new Random().nextInt(899999)+100000);
+//			HttpSession session=request.getSession();
+//			session.setAttribute("verificationCode", code);
+			if(sendbyEmailTools.send(sender, receiver, title, "验证码为:"+code)) {
+				json.put("code", 200);
+				json.put("data", null);
+			}
+			HttpSession session=request.getSession();
+			session.setAttribute("verificationCode", code);
+//			System.out.println(session.getAttribute("verificationCode"));
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			json.put("code", 400);
+			json.put("data", null);
+		}
+		return json;
+	}
+	@PostMapping("account/signUp")
+	@ResponseBody
+	public JSONObject signUp(@RequestBody JSONObject jsonObject,HttpServletRequest request) {
+		JSONObject json=new JSONObject();
+		try {
+			HttpSession session=request.getSession();
+			String username=jsonObject.getAsString("username");
+			String password=jsonObject.getAsString("password");
+			String email=jsonObject.getAsString("email");
+			String verificationCode=jsonObject.getAsString("verificationCode");
+			String verificationCode2=(String) session.getAttribute("verificationCode");
+//			System.out.println(verificationCode);
+//			System.out.println(verificationCode2);
+			if(verificationCode.equals(verificationCode2)) {
+				User user=new User(username,password,email);
+			    userService.inserUser(user);
+			    int user_id=user.getUser_id();
+			    session.setAttribute("user_id", user_id);
+			}
+			else {
+				json.put("code", 403);
+				json.put("data", null);
+				return json;
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			json.put("code", 400);
+			json.put("data", null);
+			return json;
+		}
+		json.put("code", 200);
+		json.put("data", null);
+		return json;
+	}
 }

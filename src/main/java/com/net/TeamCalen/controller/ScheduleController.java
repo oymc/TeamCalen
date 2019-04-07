@@ -48,7 +48,7 @@ public class ScheduleController {
 	public JSONObject docreateSchedule(@RequestBody JSONObject jsonObject,HttpServletRequest request) {
 		//userid从session中获取
 		HttpSession session=request.getSession();
-//		int user_id=(int)session.getAttribute("user_id");
+		int user_id=(int)session.getAttribute("user_id");
 		String year=jsonObject.getAsString("year");
 		String month=jsonObject.getAsString("month");
 		String day=jsonObject.getAsString("day");
@@ -63,7 +63,7 @@ public class ScheduleController {
 		if(jsonObject.getAsString("hasReminder").equals("true")){
 				hasReminder=true;
 		}
-		Schedule schedule=new Schedule(233,date,startHour,startMinute,endHour,endMinute,scheduleText,hasReminder);
+		Schedule schedule=new Schedule(user_id,date,startHour,startMinute,endHour,endMinute,scheduleText,hasReminder);
 		JSONObject jsonObject2 = new JSONObject();
 //		int scheduleId=schedule.getSchedule_id();
 //		session.setAttribute("scheduleId", scheduleId);

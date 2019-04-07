@@ -2,16 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.net.TeamCalen.dao.UserDao">
 <select id="selectUser" resultType="com.net.TeamCalen.entity.User" >
-	select* from user where username =#{username} and password=#{password} and mailbox =#{mailbox}
-</select>
-<select id="selectUserbyname" resultType="com.net.TeamCalen.entity.User" >
 	select* from user where username =#{username} and password=#{password}
 </select>
-<select id="selectUserbymailbox" resultType="com.net.TeamCalen.entity.User" >
-	select* from user where mailbox =#{mailbox}
+<select id="selectUserbyname" resultType="com.net.TeamCalen.entity.User" >
+	select* from user where username =#{username}
 </select>
-<insert id="inserUser">
-insert user (username,password,mailbox)
-values (#{username},#{password},#{mailbox})
+<select id="selectEmailbyName" >
+	select email from user where email =#{email}
+</select>
+<insert id="inserUser"  parameterType="com.net.TeamCalen.entity.User" useGeneratedKeys="true" keyProperty="user_id">
+insert into user (username,password,email)
+values (#{user.username},#{user.password},#{user.email})
 </insert>
 </mapper>
