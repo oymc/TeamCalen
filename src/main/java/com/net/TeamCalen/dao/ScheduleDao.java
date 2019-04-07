@@ -23,11 +23,12 @@ public interface ScheduleDao {
 //			@Param("state") String state,
 //			@Param("hasReminder") boolean hasReminder);
 	public boolean insertSchedule(Schedule schedule);
-	public List<Schedule> selectSchedulebyuser_id(@Param("user_id") String user_id);
-	public List<Map<String, Object>> selectSchedulebydate(@Param("date") Date date);
+	public int judgeUserbyScheduleId(@Param("schedule_id") int schedule_id);
+	public List<Map<String, Object>> selectSchedulebyuser_id(@Param("user_id") int user_id);
+	public List<Map<String, Object>> selectSchedulebydate(@Param("date") Date date,@Param("user_id") int user_id);
 	public Map<String, Object> selectSchedulebyscheduleid(@Param("schedule_id") int schedule_id);
-	public List<Map<String, Object>> selectRecentSchedules(@Param("date") Date date,@Param("order") String order, @Param("amount") int amount);
-	public List<Amount> getEveryDayScheduleAmountInAMonth(@Param("yearmonth") String yearmonth);
+	public List<Map<String, Object>> selectRecentSchedules(@Param("date") Date date,@Param("order") String order, @Param("amount") int amount,@Param("user_id") int user_id);
+	public List<Amount> getEveryDayScheduleAmountInAMonth(@Param("yearmonth") String yearmonth,@Param("user_id") int user_id);
 	/**
 	 * 修改状态，从session获取id
 	 * @param schedule_id

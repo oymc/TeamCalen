@@ -29,18 +29,21 @@ public class ScheduleService {
 	public boolean insertSchedule(Schedule schedule) {
 		return scheduleDao.insertSchedule(schedule);
 	}
-	public List<Schedule> selectSchedulebyuser_id(String user_id){
+	public int judgeUserbyScheduleId(int schedule_id) {
+		return scheduleDao.judgeUserbyScheduleId(schedule_id);
+	}
+	public List<Map<String, Object>> selectSchedulebyuser_id(int user_id){
 		
 		return scheduleDao.selectSchedulebyuser_id(user_id);
 	}
-	public List<Map<String, Object>> selectSchedulebydate(Date date){
-		return scheduleDao.selectSchedulebydate(date);
+	public List<Map<String, Object>> selectSchedulebydate(Date date,int user_id){
+		return scheduleDao.selectSchedulebydate(date,user_id);
 	}
-	public List<Map<String, Object>> selectRecentSchedules(Date date,String order,int amount){
-		return scheduleDao.selectRecentSchedules(date,order,amount);
+	public List<Map<String, Object>> selectRecentSchedules(Date date,String order,int amount,int user_id ){
+		return scheduleDao.selectRecentSchedules(date,order,amount,user_id);
 	}
-	public List<Amount> getEveryDayScheduleAmountInAMonth(String yearmonth){
-		return scheduleDao.getEveryDayScheduleAmountInAMonth(yearmonth);
+	public List<Amount> getEveryDayScheduleAmountInAMonth(String yearmonth,int user_id){
+		return scheduleDao.getEveryDayScheduleAmountInAMonth(yearmonth,user_id);
 	}
 	public Map<String, Object> selectSchedulebyscheduleid(int schedule_id) {
 		return scheduleDao.selectSchedulebyscheduleid(schedule_id);

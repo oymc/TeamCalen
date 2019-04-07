@@ -17,18 +17,23 @@
 	#{start_hour},#{start_minute},#{end_hour},#{end_minute},
 	#{schedule_text},#{state},#{hasReminder});
 	</insert>
-	<select id="selectSchedulebyuserid" parameterType="int">
-		select * from schedule join user on user.user_id=schedule.user_id where username=#{username};
+	<select id="judgeUserbyScheduleId" parameterType="int" resultType="int">
+		select user_id from schedule where schedule_id=#{schedule_id};
+	</select>
+	<select id="selectSchedulebyuserid" parameterType="int" resultType="map">
+		select schedule_id as id,DATE_FORMAT(date,"%y") as year,DATE_FORMAT(date,"%m") as month,DATE_FORMAT(date,"%d") as day,start_hour as startHour,start_minute as startMinute,
+				end_hour as endHour,end_minute as endMinute,schedule_text as scheduleText,state as scheduleState
+		 from schedule where user_id=#{user_id};
 	</select>
 	<select id="selectSchedulebydate" resultType="map">
-		select schedule_id as id,Year(date) as year,Month(date) as month,Day(date) as day,start_hour as startHour,start_minute as startMinute,
+		select schedule_id as id,DATE_FORMAT(date,"%y") as year,DATE_FORMAT(date,"%m") as month,DATE_FORMAT(date,"%d") as day,start_hour as startHour,start_minute as startMinute,
 				end_hour as endHour,end_minute as endMinute,schedule_text as scheduleText,state as scheduleState
-		 from schedule where date=#{date};
+		 from schedule where date=#{date} and user_id=#{user_id};
 	</select>
 	<select id="selectRecentSchedules" resultType="map">
-		select schedule_id as id,Year(date) as year,Month(date) as month,Day(date) as day,start_hour as startHour,start_minute as startMinute,
+		select schedule_id as id,DATE_FORMAT(date,"%y") as year,DATE_FORMAT(date,"%m") as month,DATE_FORMAT(date,"%d") as day,start_hour as startHour,start_minute as startMinute,
 				end_hour as endHour,end_minute as endMinute,schedule_text as scheduleText,state as scheduleState
-		 from schedule where date &gt;=#{date} order by date,start_hour,start_minute,end_hour,end_minute ${order} limit #{amount};
+		 from schedule where date &gt;=#{date} and user_id=#{user_id} order by date,start_hour,start_minute,end_hour,end_minute ${order} limit #{amount};
 	</select>
 	  
 	<resultMap id="map" type="com.net.TeamCalen.entity.Amount" >
@@ -36,7 +41,7 @@
 	<result property="scheduleAmount" column="scheduleAmount"/>
 	</resultMap>
 	<select id="getEveryDayScheduleAmountInAMonth" resultMap="map">
-		select day(date) as day,count(*) as scheduleAmount from schedule where DATE_FORMAT(date,'%Y-%m')=#{yearmonth} GROUP BY day(date);
+		select day(date) as day,count(*) as scheduleAmount from schedule where DATE_FORMAT(date,'%Y-%m')=#{yearmonth} and user_id=#{user_id} GROUP BY day(date);
 	</select>
 	<select id="selectSchedulebyscheduleid" parameterType="int" resultType="map">
 		select Year(date) as year,Month(date) as month,Day(date) as day,start_hour as startHour,start_minute as startMinute,
