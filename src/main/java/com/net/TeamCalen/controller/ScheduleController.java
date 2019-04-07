@@ -45,10 +45,10 @@ public class ScheduleController {
 	ScheduleService scheduleService;
 	@PostMapping("controlPanel/createSchedule")
 	@ResponseBody
-	public void docreateSchedule(@RequestBody JSONObject jsonObject,HttpServletRequest request) {
+	public JSONObject docreateSchedule(@RequestBody JSONObject jsonObject) {
 		//userid从session中获取
-		HttpSession session=request.getSession();
-		int user_id=(int)session.getAttribute("user_id");
+//		HttpSession session=request.getSession();
+//		int user_id=(int)session.getAttribute("user_id");
 		String year=jsonObject.getAsString("year");
 		String month=jsonObject.getAsString("month");
 		String day=jsonObject.getAsString("day");
@@ -63,9 +63,18 @@ public class ScheduleController {
 		if(jsonObject.getAsString("hasReminder").equals("true")){
 				hasReminder=true;
 		}
-		Schedule schedule=new Schedule(user_id,date,startHour,startMinute,endHour,endMinute,scheduleText,hasReminder);
+		Schedule schedule=new Schedule(233,date,startHour,startMinute,endHour,endMinute,scheduleText,hasReminder);
 //		schedule.setUser_id(233);
-	scheduleService.insertSchedule(schedule);
+		JSONObject jsonObject2=new JSONObject();
+	if(scheduleService.insertSchedule(schedule)) {
+		jsonObject2.put("code", 200);
+		jsonObject2.put("data", null);
+	}
+	else {
+		jsonObject2.put("code", 400);
+		jsonObject2.put("data", null);
+	}
+	return jsonObject2;
 	}
 	//切换日程完成
 	/**
@@ -76,7 +85,7 @@ public class ScheduleController {
 	 */
 	@PostMapping("controlPanel/changeScheduleState")
 	@ResponseBody
-	public void dochangeScheduleState(@RequestBody  JSONObject jsonObject) {
+	public JSONObject dochangeScheduleState(@RequestBody  JSONObject jsonObject) {
 		int scheduleId=(int) jsonObject.getAsNumber("scheduleId");
 		String state=jsonObject.getAsString("state");
 		String stateStr="";
@@ -86,33 +95,69 @@ public class ScheduleController {
 		else {
 			stateStr="unfinished";
 		}
-		scheduleService.updateSchedulebystate(scheduleId, stateStr);
+		JSONObject jsonObject2=new JSONObject();
+		if(scheduleService.updateSchedulebystate(scheduleId, stateStr)) {
+			jsonObject2.put("code", 200);
+			jsonObject2.put("data", null);
+		}
+		else {
+			jsonObject2.put("code", 400);
+			jsonObject2.put("data", null);
+		}
+		return jsonObject2;
 	}
 	//恢复已经被取消的日程
 	@PostMapping("controlPanel/resumeSchedule")
 	@ResponseBody
-	public void doresumeSchedule(@RequestBody  JSONObject jsonObject) {
+	public JSONObject doresumeSchedule(@RequestBody  JSONObject jsonObject) {
 		int scheduleId=(int) jsonObject.getAsNumber("scheduleId");
-		scheduleService.updateSchedulebystate(scheduleId, "unfinished");
+		JSONObject jsonObject2=new JSONObject();
+		if(scheduleService.updateSchedulebystate(scheduleId, "unfinished")) {
+			jsonObject2.put("code", 200);
+			jsonObject2.put("data", null);
+		}
+		else {
+			jsonObject2.put("code", 400);
+			jsonObject2.put("data", null);
+		}
+		return jsonObject2;
 	}
 	//取消日程
 		@PostMapping("controlPanel/cancelSchedule")
 		@ResponseBody
-		public void docancelSchedule(@RequestBody  JSONObject jsonObject) {
+		public JSONObject docancelSchedule(@RequestBody  JSONObject jsonObject) {
 			int scheduleId=(int) jsonObject.getAsNumber("scheduleId");
-			scheduleService.updateSchedulebystate(scheduleId, "canceled");
+			JSONObject jsonObject2=new JSONObject();
+			if(scheduleService.updateSchedulebystate(scheduleId, "canceled")) {
+				jsonObject2.put("code", 200);
+				jsonObject2.put("data", null);
+			}
+			else {
+				jsonObject2.put("code", 400);
+				jsonObject2.put("data", null);
+			}
+			return jsonObject2;
 		}
 	//删除日程
 	@PostMapping("controlPanel/deleteSchedule")
 	@ResponseBody
-	public void dodeleteSchedule(@RequestBody  JSONObject jsonObject) {
+	public JSONObject dodeleteSchedule(@RequestBody  JSONObject jsonObject) {
 		int scheduleId=(int) jsonObject.getAsNumber("scheduleId");
-		scheduleService.deleteSchedule(scheduleId);
+		JSONObject jsonObject2=new JSONObject();
+		if(scheduleService.deleteSchedule(scheduleId)) {
+			jsonObject2.put("code", 200);
+			jsonObject2.put("data", null);
+		}
+		else {
+			jsonObject2.put("code", 400);
+			jsonObject2.put("data", null);
+		}
+		return jsonObject2;
 	}
 	//编辑日程
 	@PostMapping("controlPanel/modifySchedule")
 	@ResponseBody
-	public void domodifySchedule(@RequestBody  JSONObject jsonObject) {
+	public JSONObject domodifySchedule(@RequestBody  JSONObject jsonObject) {
 		int scheduleId=(int) jsonObject.getAsNumber("id");
 		String year=jsonObject.getAsString("year");
 		String month=jsonObject.getAsString("month");
@@ -128,10 +173,17 @@ public class ScheduleController {
 		if(jsonObject.getAsString("hasReminder").equals("true")){
 				hasReminder=true;
 		}
-//		int user_id=233;
 		Schedule schedule=new Schedule(scheduleId,0,date, startHour, startMinute, endHour, endMinute, scheduleText,hasReminder);
-		//userid从session中获取
-		scheduleService.updateSchedule(schedule);
+		JSONObject jsonObject2=new JSONObject();
+		if(scheduleService.updateSchedule(schedule)) {
+			jsonObject2.put("code", 200);
+			jsonObject2.put("data", null);
+		}
+		else {
+			jsonObject2.put("code", 400);
+			jsonObject2.put("data", null);
+		}
+		return jsonObject2;
 	}
 	//根据 ID 返回对应日程信息
 	@GetMapping("controlPanel/getScheduleById")
@@ -139,35 +191,43 @@ public class ScheduleController {
 	public JSONObject dogetScheduleById(@RequestParam("scheduleId") int scheduleId) {
 //		int scheduleId=(int) jsonObject.getAsNumber("scheduleId");
 //		int scheduleId=schedule.getSchedule_id();
+		JSONObject json=new JSONObject();
 		Map<String, Object> map=scheduleService.selectSchedulebyscheduleid(scheduleId);
-		JSONObject jsonMap=new JSONObject(map);
-		return jsonMap;
+		json.put("code", 200);
+		json.put("data", map);
+		return json;
 	}
 	//得到某一天的所有日程
 	@GetMapping("controlPanel/getSchedulesByDay")
 	@ResponseBody
-	public List<Map<String,Object>> getSchedulesByDay(@RequestParam("year") String year,@RequestParam("month") String month,@RequestParam("day") String day){
+	public JSONObject getSchedulesByDay(@RequestParam("year") String year,@RequestParam("month") String month,@RequestParam("day") String day){
 //		String year=jsonObject.getAsString("year");
 //		String month=jsonObject.getAsString("month");
 //		String day=jsonObject.getAsString("day");
 		String datestr=year+'-'+month+'-'+day;
 		java.sql.Date date=Date.valueOf(datestr);		
 		List<Map<String, Object>> schedate=scheduleService.selectSchedulebydate(date);
-		return schedate;
+		JSONObject json=new JSONObject();
+		json.put("code", 200);
+		json.put("data", schedate);
+		return json;
 	}
 	//返回用户从今天起到未来的特定条日程
 	@GetMapping("controlPanel/getRecentSchedules")
 	@ResponseBody
-	public List<Map<String,Object>> getRecentSchedules(@RequestParam("amount") int amount){
+	public JSONObject getRecentSchedules(@RequestParam("amount") int amount){
 //		int amount=(int) jsonObject.getAsNumber("amount");
 		java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
 		List<Map<String, Object>> schedate=scheduleService.selectRecentSchedules(date,"ASC",amount);
-		return schedate;
+		JSONObject json=new JSONObject();
+		json.put("code", 200);
+		json.put("data", schedate);
+		return json;
 	}
 	//获取指定年月中每一天的日程数量
 	@GetMapping("controlPanel/getEveryDayScheduleAmountInAMonth")
 	@ResponseBody
-	public int[] getEveryDayScheduleAmountInAMonth(@RequestParam("year") String year,@RequestParam("month") String month) {
+	public JSONObject getEveryDayScheduleAmountInAMonth(@RequestParam("year") String year,@RequestParam("month") String month) {
 //		String year=jsonObject.getAsString("year");
 //		String month=jsonObject.getAsString("month");
 		String yearmonth=year+'-'+month;
@@ -194,6 +254,11 @@ public class ScheduleController {
 		for(int i=0;i<MaxDay;i++) {
 			System.out.print(scheduleAmount[i]+'\n');
 		}
-		return scheduleAmount;
+		JSONObject json=new JSONObject();
+		json.put("year", year);
+		json.put("month", month);
+		json.put("code", 200);
+		json.put("data", scheduleAmount);
+		return json;
 	}
 }
