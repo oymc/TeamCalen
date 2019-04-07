@@ -14,7 +14,7 @@ public class UserService {
 	public boolean inserUser(User user) {
 		return userDao.inserUser(user);
 	}
-    public User selectUser(String username,String password) {
+    public String selectUser(String username,String password) {
 //    	System.out.println(username+" "+username);
     	return userDao.selectUser(username, password);
     }

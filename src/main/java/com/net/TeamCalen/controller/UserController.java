@@ -39,11 +39,18 @@ public class UserController {
 		try {
 			String username=jsonObject.getAsString("username");
 			String password=jsonObject.getAsString("password");
-			if(userService.selectUser(username, password)!=null) {
-				HttpSession session=request.getSession();
+			String user_id="";
+			user_id=userService.selectUser(username, password);
+			HttpSession session=request.getSession();
+			if(user_id!=null) {
+				session.setAttribute("user_id",Integer.parseInt(user_id));
 				session.setAttribute("username", username);
 				session.setAttribute("password", password);
 				json.put("code", 200);
+				json.put("data", null);
+			}
+			else {
+				json.put("code", 404);
 				json.put("data", null);
 			}
 		}catch (Exception e) {
@@ -61,7 +68,7 @@ public class UserController {
 		JSONObject json=new JSONObject();
 		try {
 			String receiver=jsonObject.getAsString("email");
-//			System.out.println(receiver);
+			System.out.println(receiver);
 			String sender ="TeamCalen@163.com";
 			String title="TeamCalen注册";
 			String code=String.valueOf(new Random().nextInt(899999)+100000);
@@ -106,6 +113,7 @@ public class UserController {
 			    userService.inserUser(user);
 			    int user_id=user.getUser_id();
 			    session.setAttribute("user_id", user_id);
+			    System.out.println("iaghiawrghiorqghqugh"+session.getAttribute("user_id"));
 			}
 			else {
 				json.put("code", 403);

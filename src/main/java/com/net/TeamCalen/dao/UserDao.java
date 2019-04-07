@@ -19,7 +19,7 @@ public interface UserDao {
 	 * @param password
 	 * @return user
 	 */
-	public User selectUser(@Param("username") String username,@Param("password") String password);
+	public String selectUser(@Param("username") String username,@Param("password") String password);
 	
 	public String selectEmailbyName(@Param("username") String username);
 	
