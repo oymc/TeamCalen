@@ -22,6 +22,9 @@ public class UserService {
 //    	//System.out.println(username+" "+username);
 //    	return userDao.selectUserbymailbox(email);
 //    }
+    public User selectUserbyname(String username) {
+    	return userDao.selectUserbyname(username);
+    }
 	public String selectEmailbyName(String username) {
     	return userDao.selectEmailbyName(username);
   }

@@ -29,5 +29,5 @@ public interface UserDao {
 	 * @param username
 	 * @return email
 	 */
-	public String selectUserbyname(@Param("username") String username);
+	public User selectUserbyname(@Param("username") String username);
 }

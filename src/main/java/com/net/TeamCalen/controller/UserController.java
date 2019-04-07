@@ -94,6 +94,11 @@ public class UserController {
 			String email=jsonObject.getAsString("email");
 			String verificationCode=jsonObject.getAsString("verificationCode");
 			String verificationCode2=(String) session.getAttribute("verificationCode");
+			if(userService.selectUserbyname(username)!=null) {
+				json.put("code", 409);
+				json.put("data", null);
+				return json;
+			}
 //			System.out.println(verificationCode);
 //			System.out.println(verificationCode2);
 			if(verificationCode.equals(verificationCode2)) {
