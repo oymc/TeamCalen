@@ -60,6 +60,7 @@ public class ScheduleController {
 		int endMinute=(int) jsonObject.getAsNumber("endMinute");
 		String scheduleText=jsonObject.getAsString("scheduleText");
 		boolean hasReminder=false;
+		System.out.println("increate"+jsonObject.getAsString("hasReminder"));
 		if(jsonObject.getAsString("hasReminder").equals("true")){
 				hasReminder=true;
 		}
@@ -182,6 +183,7 @@ public class ScheduleController {
 		int endHour=(int) jsonObject.getAsNumber("endHour");
 		int endMinute=(int) jsonObject.getAsNumber("endMinute");
 		String scheduleText=jsonObject.getAsString("scheduleText");
+		System.out.println("modify"+jsonObject.getAsString("hasReminder"));
 		boolean hasReminder=false;
 		if(jsonObject.getAsString("hasReminder").equals("true")){
 				hasReminder=true;
@@ -206,7 +208,8 @@ public class ScheduleController {
 			return jsonNew;
 		}
 		Map<String, Object> map=scheduleService.selectSchedulebyscheduleid(scheduleId);
-		if(map.get("hasReminder")=="1") {
+		System.out.println("getScheduleId"+map.get("hasReminder"));
+		if((Integer)map.get("hasReminder")==1) {
 			map.put("hasReminder", true);
 		}
 		else {

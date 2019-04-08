@@ -4,6 +4,7 @@ import java.sql.Date;
 import org.junit.validator.PublicClassValidator;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 public class Schedule {
 	private int schedule_id;
 	private int user_id;
@@ -71,6 +72,7 @@ public class Schedule {
 	public void setState(String state) {
 		this.state = state;
 	}
+	@JsonProperty("isHasReminder")
 	public boolean isHasReminder() {
 		return hasReminder;
 	}
