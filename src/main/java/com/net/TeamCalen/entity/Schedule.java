@@ -101,7 +101,7 @@ public class Schedule {
 		this.end_hour=end_hour;
 		this.end_minute=end_minute;
 		this.schedule_text=schedule_text;
-		this.state="unfinished";
+//		this.state="unfinished";
 		this.hasReminder=hasReminder;	
 	}
 	@Override

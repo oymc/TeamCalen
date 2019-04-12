@@ -35,177 +35,23 @@ import com.fasterxml.jackson.databind.deser.std.DateDeserializers.CalendarDeseri
 import com.net.TeamCalen.entity.Amount;
 import com.net.TeamCalen.entity.Schedule;
 import com.net.TeamCalen.service.ScheduleService;
+import com.net.TeamCalen.utils.JsonSet;
 
 import net.minidev.json.JSONObject;
 
 @Controller
-//@RequestMapping("controlPanel")
 public class ScheduleController {
 	@Autowired
 	ScheduleService scheduleService;
-	@PostMapping("controlPanel/createSchedule")
-	@ResponseBody
-	public JSONObject docreateSchedule(@RequestBody JSONObject jsonObject,HttpServletRequest request) {
-		//userid从session中获取
-		HttpSession session=request.getSession();
-		int user_id=(int)session.getAttribute("user_id");
-		String year=jsonObject.getAsString("year");
-		String month=jsonObject.getAsString("month");
-		String day=jsonObject.getAsString("day");
-		String datestr=year+'-'+month+'-'+day;
-		java.sql.Date date=Date.valueOf(datestr);
-		int startHour=(int) jsonObject.getAsNumber("startHour");
-		int startMinute=(int) jsonObject.getAsNumber("startMinute");
-		int endHour=(int) jsonObject.getAsNumber("endHour");
-		int endMinute=(int) jsonObject.getAsNumber("endMinute");
-		String scheduleText=jsonObject.getAsString("scheduleText");
-		boolean hasReminder=false;
-		System.out.println("increate"+jsonObject.getAsString("hasReminder"));
-		if(jsonObject.getAsString("hasReminder").equals("true")){
-				hasReminder=true;
-		}
-		Schedule schedule=new Schedule(user_id,date,startHour,startMinute,endHour,endMinute,scheduleText,hasReminder);
-		JSONObject jsonNew = new JSONObject();
-//		int scheduleId=schedule.getSchedule_id();
-//		session.setAttribute("scheduleId", scheduleId);
-	  if(scheduleService.insertSchedule(schedule)) {
-		  jsonNew=this.setJson(200, null);
-	   }
-	   else{
-		   jsonNew=this.setJson(400, null);
-	   }
-	  int scheduleId=schedule.getSchedule_id();
-	  session.setAttribute("scheduleId", scheduleId);
-	  return jsonNew;
-	}
-	//切换日程是否完成
-	@PostMapping("controlPanel/changeScheduleState")
-	@ResponseBody
-	public JSONObject dochangeScheduleState(@RequestBody  JSONObject jsonObject,HttpServletRequest request) {
-		JSONObject jsonNew=new JSONObject();
-		HttpSession session=request.getSession();
-		int scheduleId=(int) jsonObject.getAsNumber("scheduleId");
-		if(this.judgeUser((int)session.getAttribute("user_id"),scheduleId)) {
-			jsonNew=this.setJson(403, null);
-			return jsonNew;
-		}
-		String state=jsonObject.getAsString("state");
-		String stateStr="";
-		if(state.equals("true")) {
-			stateStr="finished";
-		}
-		else {
-			stateStr="unfinished";
-		}
-		if(scheduleService.updateSchedulebystate(scheduleId, stateStr)){
-			jsonNew=this.setJson(200, null);
-		}
-		else {
-			jsonNew=this.setJson(400, null);
-		}
-		return jsonNew;
-	}
-	//恢复已经被取消的日程
-	@PostMapping("controlPanel/resumeSchedule")
-	@ResponseBody
-	public JSONObject doresumeSchedule(@RequestBody  JSONObject jsonObject,HttpServletRequest request) {
-		JSONObject jsonNew=new JSONObject();
-		HttpSession session=request.getSession();
-		int scheduleId=(int) jsonObject.getAsNumber("scheduleId");
-		if(this.judgeUser((int)session.getAttribute("user_id"),scheduleId)) {
-			jsonNew=this.setJson(403, null);
-			return jsonNew;
-		}
-		if(scheduleService.updateSchedulebystate(scheduleId, "unfinished")) {
-			jsonNew=this.setJson(200, null);
-		}
-		else {
-			jsonNew=this.setJson(400, null);
-		}
-		return jsonNew;
-	}
-	//取消日程
-		@PostMapping("controlPanel/cancelSchedule")
-		@ResponseBody
-		public JSONObject docancelSchedule(@RequestBody  JSONObject jsonObject,HttpServletRequest request) {
-			JSONObject jsonNew=new JSONObject();
-			HttpSession session=request.getSession();
-			int scheduleId=(int) jsonObject.getAsNumber("scheduleId");
-			if(this.judgeUser((int)session.getAttribute("user_id"),scheduleId)) {
-				jsonNew=this.setJson(403, null);
-				return jsonNew;
-			}
-			if(scheduleService.updateSchedulebystate(scheduleId, "canceled")) {
-				jsonNew=this.setJson(200, null);
-			}
-			else {
-				jsonNew=this.setJson(400, null);
-			}
-			return jsonNew;
-		}
-	//删除日程
-	@PostMapping("controlPanel/deleteSchedule")
-	@ResponseBody
-	public JSONObject dodeleteSchedule(@RequestBody  JSONObject jsonObject,HttpServletRequest request) {
-		JSONObject jsonNew=new JSONObject();
-		HttpSession session=request.getSession();
-		int scheduleId=(int) jsonObject.getAsNumber("scheduleId");
-		if(this.judgeUser((int)session.getAttribute("user_id"),scheduleId)) {
-			jsonNew=this.setJson(403, null);
-			return jsonNew;
-		}
-		if(scheduleService.deleteSchedule(scheduleId)) {
-			jsonNew=this.setJson(200, null);
-		}
-		else {
-			jsonNew=this.setJson(400, null);
-		}
-		return jsonNew;
-	}
-	//编辑日程
-	@PostMapping("controlPanel/modifySchedule")
-	@ResponseBody
-	public JSONObject domodifySchedule(@RequestBody  JSONObject jsonObject,HttpServletRequest request) {
-		JSONObject jsonNew=new JSONObject();
-		HttpSession session=request.getSession();
-		int scheduleId=(int) jsonObject.getAsNumber("id");
-		if(this.judgeUser((int)session.getAttribute("user_id"),scheduleId)) {
-			jsonNew=this.setJson(403, null);
-			return jsonNew;
-		}
-		String year=jsonObject.getAsString("year");
-		String month=jsonObject.getAsString("month");
-		String day=jsonObject.getAsString("day");
-		String datestr=year+'-'+month+'-'+day;
-		java.sql.Date date=Date.valueOf(datestr);
-		int startHour=(int) jsonObject.getAsNumber("startHour");
-		int startMinute=(int) jsonObject.getAsNumber("startMinute");
-		int endHour=(int) jsonObject.getAsNumber("endHour");
-		int endMinute=(int) jsonObject.getAsNumber("endMinute");
-		String scheduleText=jsonObject.getAsString("scheduleText");
-		System.out.println("modify"+jsonObject.getAsString("hasReminder"));
-		boolean hasReminder=false;
-		if(jsonObject.getAsString("hasReminder").equals("true")){
-				hasReminder=true;
-		}
-		Schedule schedule=new Schedule(scheduleId,0,date, startHour, startMinute, endHour, endMinute, scheduleText,hasReminder);
-		if(scheduleService.updateSchedule(schedule)) {
-			jsonNew=this.setJson(200, null);
-		}
-		else {
-			jsonNew=this.setJson(400, null);
-		}
-		return jsonNew;
-	}
 	//根据 ID 返回对应日程信息
 	@GetMapping("controlPanel/getScheduleById")
 	@ResponseBody
 	public JSONObject dogetScheduleById(@RequestParam("scheduleId") int scheduleId,HttpServletRequest request) {
-		JSONObject jsonNew=new JSONObject();
+		JSONObject jsonReturn=new JSONObject();
 		HttpSession session=request.getSession();
-		if(this.judgeUser((int)session.getAttribute("user_id"),scheduleId)) {
-			jsonNew=this.setJson(403, null);
-			return jsonNew;
+		if((int)session.getAttribute("user_id")!=scheduleService.judgeUserbyScheduleId(scheduleId)) {
+			jsonReturn=JsonSet.jsonReturnSet(403, null);
+			return jsonReturn;
 		}
 		Map<String, Object> map=scheduleService.selectSchedulebyscheduleid(scheduleId);
 		System.out.println("getScheduleId"+map.get("hasReminder"));
@@ -215,8 +61,8 @@ public class ScheduleController {
 		else {
 			map.put("hasReminder", false);
 		}
-		jsonNew=this.setJson(200,map);
-		return jsonNew;
+		jsonReturn=JsonSet.jsonReturnSet(200,map);
+		return jsonReturn;
 	}
 	//得到某一天的所有日程
 	@GetMapping("controlPanel/getSchedulesByDay")
@@ -225,11 +71,11 @@ public class ScheduleController {
 		HttpSession session=request.getSession();
 		int user_id=(int) session.getAttribute("user_id");
 		String datestr=year+'-'+month+'-'+day;
-		java.sql.Date date=Date.valueOf(datestr);		
+		java.sql.Date date=Date.valueOf(datestr);
 		List<Map<String, Object>> schedule=scheduleService.selectSchedulebydate(date,user_id);
-		JSONObject jsonMap=new JSONObject();
-		jsonMap.put("schedules", schedule);
-		return this.setJson(200, jsonMap);
+		JSONObject jsonData=new JSONObject();
+		jsonData.put("schedules", schedule);//将list转为Json
+		return JsonSet.jsonReturnSet(200, jsonData);
 	}
 	//返回用户从今天起到未来的特定条日程
 	@GetMapping("controlPanel/getRecentSchedules")
@@ -240,10 +86,9 @@ public class ScheduleController {
 		int user_id=(int) session.getAttribute("user_id");
 		java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
 		List<Map<String, Object>> schedule=scheduleService.selectRecentSchedules(date,"ASC",amount,user_id);
-		JSONObject jsonList=new JSONObject();
-		jsonList.put("schedules", schedule);
-		return this.setJson(200, jsonList);
-		
+		JSONObject jsonData=new JSONObject();
+		jsonData.put("schedules", schedule);
+		return JsonSet.jsonReturnSet(200, jsonData);
 	}
 	//TODO 获取指定年月中每一天的日程数量
 	@GetMapping("controlPanel/getEveryDayScheduleAmountInAMonth")
@@ -251,7 +96,9 @@ public class ScheduleController {
 	public JSONObject getEveryDayScheduleAmountInAMonth(@RequestParam("year") String year,@RequestParam("month") String month,HttpServletRequest request) {
 		HttpSession session=request.getSession();
 		int user_id=(int) session.getAttribute("user_id");
+		//某年某月 'YYYY-MM'
 		String yearmonth=year+'-'+month;
+		//获取该年该月份最大天数
 		Calendar calendar=Calendar.getInstance();
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyymm");
 		try {
@@ -261,6 +108,7 @@ public class ScheduleController {
 			e.printStackTrace();
 		}
 		int MaxDay=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		//生成数组并初始化
 		int[] scheduleAmount=new int[MaxDay];
 		for(int i=0;i<MaxDay;i++) {
 			scheduleAmount[i]=0;
@@ -270,14 +118,14 @@ public class ScheduleController {
 			String day=m.getDay();
 			int index=Integer.parseInt(day);
 			int value=m.getScheduleAmount();
-			scheduleAmount[index-1]=value;
+			scheduleAmount[index-1]=value;//遍历得到每天对应的日程数
 	}
-		for(int i=0;i<MaxDay;i++) {
-			System.out.print(scheduleAmount[i]+'\n');
-		}
-		JSONObject jsonAmount=new JSONObject();
-		jsonAmount.put("scheduleAmount", scheduleAmount);
-		return this.setJson(200, jsonAmount);
+//		for(int i=0;i<MaxDay;i++) {
+//			System.out.print(scheduleAmount[i]+'\n');
+//		}
+		JSONObject jsonData=new JSONObject();
+		jsonData.put("scheduleAmount", scheduleAmount);
+		return JsonSet.jsonReturnSet(200, jsonData);
 	}
 	//得到用户信息
 	@GetMapping("controlPanel/getUserInfo")
@@ -287,21 +135,13 @@ public class ScheduleController {
 		String username=(String) session.getAttribute("username");
 		JSONObject jsonName =new JSONObject();
 		jsonName.put("username", username);
-		return this.setJson(200, jsonName);
+		return JsonSet.jsonReturnSet(200, jsonName);
 	}
-	//根据传来的scheduleId和session，判断是否对用户有操作权限
-	private boolean judgeUser(int user_id,int scheduleId) {
-		System.out.println(user_id+scheduleId);
-		if(user_id==scheduleService.judgeUserbyScheduleId(scheduleId)) 
-			return false;
-		else
-			return true;
-	}
-	//请求状态
-	private JSONObject setJson(int code,Object data) {
-		JSONObject json=new JSONObject();
-		json.put("code", code);
-		json.put("data", data);
-		return json;
-	}
+	//code and data
+//	private JSONObject setJson(int code,Object data) {
+//		JSONObject json=new JSONObject();
+//		json.put("code", code);
+//		json.put("data", data);
+//		return json;
+//	}
 }

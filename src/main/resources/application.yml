@@ -26,9 +26,6 @@ spring:
     username: TeamCalen@163.com
     password: timemanagment3
     default-encoding: UTF-8
-    smtp: 
-      starttles:
-        enable: true
   thymeleaf:
     prefix: classpath:/templates/
     cache: false
