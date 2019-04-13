@@ -127,16 +127,6 @@ public class ScheduleController {
 		jsonData.put("scheduleAmount", scheduleAmount);
 		return JsonSet.jsonReturnSet(200, jsonData);
 	}
-	//得到用户信息
-	@GetMapping("controlPanel/getUserInfo")
-	@ResponseBody
-	public JSONObject getUserInfo(HttpServletRequest request) {
-		HttpSession session=request.getSession();
-		String username=(String) session.getAttribute("username");
-		JSONObject jsonName =new JSONObject();
-		jsonName.put("username", username);
-		return JsonSet.jsonReturnSet(200, jsonName);
-	}
 	//code and data
 //	private JSONObject setJson(int code,Object data) {
 //		JSONObject json=new JSONObject();
