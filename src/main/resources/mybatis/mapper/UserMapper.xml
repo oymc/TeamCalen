@@ -26,4 +26,7 @@ values (#{user.username},#{user.password},#{user.email})
 <update id="updatePasswordbyId">
 	update user <set>password=#{param2}</set> where user_id=#{param1};
 </update>
+<update id="updateEmail">
+	update user <set>email=#{param1}</set> where user_id=#{param2};
+</update>
 </mapper>

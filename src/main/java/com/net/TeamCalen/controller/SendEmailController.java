@@ -5,7 +5,9 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +20,12 @@ import com.net.TeamCalen.utils.RemoveSessionUtils;
 
 import net.minidev.json.JSONObject;
 @Controller
+@EnableAsync//处理异步
 public class SendEmailController {
+	/**
+     * 异步处理：使用springBoot自带async注解
+     */
+	private final org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -33,20 +40,13 @@ public class SendEmailController {
 				String sender ="TeamCalen@163.com";
 				String title="TeamCalen绑定邮箱";
 				String code=String.valueOf(new Random().nextInt(899999)+100000);
-//				HttpSession session=request.getSession();
-//				session.setAttribute("verificationCode", code);
 				System.out.println("code"+code);
-				if(sendbyEmailTools.asyncSendEmail(sender, receiver, title, "验证码为:"+code)) {
-					HttpSession session=request.getSession();
-					session.setAttribute("verificationCode", code);
-					RemoveSessionUtils.removeAttrbute(session, "verificationCode");
-					System.out.println(session.getAttribute("verificationCode"));
-					return JsonSet.jsonReturnSet(200, null);
-				}
-				else {
-					return JsonSet.jsonReturnSet(500, null);
-				}
-//				System.out.println(session.getAttribute("verificationCode"));
+				sendbyEmailTools.asyncSendEmail(sender, receiver, title, "验证码为:"+code);
+				HttpSession session=request.getSession();
+				session.setAttribute("verificationCode", code);
+				RemoveSessionUtils.removeAttrbute(session, "verificationCode");
+				logger.info(Thread.currentThread().getName());//开一个线程返回json
+				return JsonSet.jsonReturnSet(200, null);
 			}catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
@@ -69,18 +69,12 @@ public class SendEmailController {
 				String title="TeamCalen修改密码";
 				String code=String.valueOf(new Random().nextInt(899999)+100000);
 				HttpSession session=request.getSession();
-//				session.setAttribute("verificationCode", code);
 				System.out.println("code"+code);
-				if(sendbyEmailTools.asyncSendEmail(sender, receiver, title, "验证码为:"+code)) {
-					session.setAttribute("retrieveVerificationCode", code);
-					RemoveSessionUtils.removeAttrbute(session, "retrieveVerificationCode");
-					System.out.println(session.getAttribute("retrieveVerificationCode"));
-					return JsonSet.jsonReturnSet(200, null);
-				}
-				else {
-					return JsonSet.jsonReturnSet(500, null);
-				}
-				
+				sendbyEmailTools.asyncSendEmail(sender, receiver, title, "验证码为:"+code);
+				session.setAttribute("retrieveVerificationCode", code);
+				RemoveSessionUtils.removeAttrbute(session, "retrieveVerificationCode");
+				logger.info(Thread.currentThread().getName());//开一个线程返回json
+				return JsonSet.jsonReturnSet(200, null);
 			}catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
