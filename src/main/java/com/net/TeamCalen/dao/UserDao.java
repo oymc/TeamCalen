@@ -21,7 +21,7 @@ public interface UserDao {
 	 */
 	public int selectUser(@Param("username") String username,@Param("password") String password);
 	/**
-	 * 根据用户名查找邮箱
+	 * 根据用户名查找邮箱,找回密码时用
 	 * @param username
 	 * @return email
 	 */
