@@ -42,9 +42,18 @@ public class EditUserInformation {
 			    int user_id=(int) session.getAttribute("user_id");
 			    String username="";
 			    username=userservice.selectNamebyId(user_id);
+			    String picture=userservice.selectPicbyId(user_id);
+//		        int i=hFile.available();
+//		        byte data[]=new byte[i];
+//		        hFile.read(data);
+//		        hFile.close();
+//		        response.setContentType("image/*");
+//		        OutputStream toClient=response.getOutputStream();
+//		        toClient.write(data);
+//		        toClient.close();
 			    JSONObject jsonName =new JSONObject();
 			    jsonName.put("username", username);
-			    jsonName.put("avatarSrc", serviceInfo.getUrl()+"/server/image/"+username+".jpg");
+			    jsonName.put("avatarSrc", serviceInfo.getUrl()+"/server/image/"+picture);
 				return JsonSet.jsonReturnSet(200, jsonName);
 			}catch(Exception e) {
 				e.printStackTrace();
@@ -113,12 +122,15 @@ public class EditUserInformation {
 	                out.write(avatar.getBytes());    
 	                out.flush();    
 	                out.close();
-	                String picture=path+filename;
-	                System.out.println(picture);
-	                return JsonSet.jsonReturnSet(200, null);
-//	                if(userservice.updatePicbyId(user_id, picture)) {
-//	                	 return JsonSet.jsonReturnSet(200, null); 
-//	                }
+//	                String picture=path+filename;
+//	                System.out.println(picture);
+//	                return JsonSet.jsonReturnSet(200, null);
+	                if(userservice.updatePicbyId(user_id, filename)) {
+	                	 return JsonSet.jsonReturnSet(200, null); 
+	                }
+	                else {
+	                	return JsonSet.jsonReturnSet(500, null); 
+	                }
 	            } catch (FileNotFoundException e) {    
 	                e.printStackTrace();  
 	                System.out.println(e.getMessage());
