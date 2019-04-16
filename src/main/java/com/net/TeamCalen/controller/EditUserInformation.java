@@ -54,7 +54,8 @@ public class EditUserInformation {
 //		        toClient.close();
 			    JSONObject jsonName =new JSONObject();
 			    jsonName.put("username", username);
-			    jsonName.put("avatarSrc", serviceInfo.getUrl()+"/server/image/"+picture);
+			    if(picture!=null)
+			    	jsonName.put("avatarSrc", serviceInfo.getUrl()+"/server/image/"+picture);
 				return JsonSet.jsonReturnSet(200, jsonName);
 			}catch(Exception e) {
 				e.printStackTrace();
