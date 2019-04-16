@@ -119,6 +119,7 @@ public class ScheduleController {
 			int index=Integer.parseInt(day);
 			int value=m.getScheduleAmount();
 			scheduleAmount[index-1]=value;//遍历得到每天对应的日程数
+			System.out.println(scheduleAmount[index-1]);
 	}
 //		for(int i=0;i<MaxDay;i++) {
 //			System.out.print(scheduleAmount[i]+'\n');

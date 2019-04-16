@@ -38,6 +38,12 @@ public class UserService {
 	public String selectNamebyId(int user_id) {
 		return userDao.selectNamebyId(user_id);
 	}
+	public String selectPicbyId(int user_id) {
+		return userDao.selectPicbyId(user_id);
+	} 
+	public boolean updatePicbyId(int user_id,String picture) {
+		return userDao.updatePicbyId(user_id, picture);
+	}
 	public boolean updateEmail(String email,int user_id) {
 		return userDao.updateEmail(email, user_id);
 	}

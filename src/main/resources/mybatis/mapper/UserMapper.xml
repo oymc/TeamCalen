@@ -13,6 +13,9 @@
 <select id="selectNamebyId" parameterType="int" resultType="String">
 	select username from user where user_id=#{user_id};
 </select>
+<select id="selectPicbyId" parameterType="int" resultType="String">
+	select picture from user where user_id=#{user_id};
+</select>
 <select id="selectPassword" parameterType="int" resultType="String">
 	select password from user where user_id=#{user_id};
 </select>
@@ -22,6 +25,9 @@ values (#{user.username},#{user.password},#{user.email})
 </insert>
 <update id="updatePasswordbyName">
 	update user <set>password=#{param2}</set> where username=#{param1};
+</update>
+<update id="updatePicbyId">
+	update user <set>picture=#{param2}</set> where user_id=#{param1};	
 </update>
 <update id="updatePasswordbyId">
 	update user <set>password=#{param2}</set> where user_id=#{param1};

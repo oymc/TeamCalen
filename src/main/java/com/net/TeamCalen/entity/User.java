@@ -9,6 +9,7 @@ public class User implements Serializable {
 	private String username;
 	private String password;
 	private String email;
+	private String picture;
 	public String getUsername() {
 		return username;
 	}
@@ -46,5 +47,11 @@ public class User implements Serializable {
 		this.username=username;
 		this.password=password;
 		this.email=email;
+	}
+	public String getPicture() {
+		return picture;
+	}
+	public void setPicture(String picture) {
+		this.picture = picture;
 	}
 }

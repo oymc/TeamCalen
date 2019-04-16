@@ -43,11 +43,24 @@ public interface UserDao {
 	 */
 	public boolean updatePasswordbyId(@Param("user_id") int user_id,@Param("password") String password);
 	/**
-	 * 返回username
+	 * 返回username，用户面板显示
 	 * @param user_id
 	 * @return username
 	 */
 	public String selectNamebyId(@Param("user_id")int user_id);
+	/**
+	 * 返回图片地址，用户面板显示
+	 * @param user_id
+	 * @return picture 
+	 */
+	public String selectPicbyId(@Param("user_id")int user_id);
+	/**
+	 * 更改用户头像
+	 * @param user_id
+	 * @param picture
+	 * @return
+	 */
+	public boolean updatePicbyId(@Param("user_id")int user_id,@Param("picture") String picture);
 	/**
 	 * 修改email
 	 * @param email
@@ -56,7 +69,7 @@ public interface UserDao {
 	 */
 	public boolean updateEmail(@Param("email")String email,@Param("user_id") int user_id);
 	/**
-	 * 
+	 * 根据用户名返回密码，登录时判断
 	 * @param user_id
 	 * @return password
 	 */

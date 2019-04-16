@@ -1,5 +1,5 @@
 package com.net.TeamCalen.entity;
-
+//返回每天的日程数
 public class Amount {
 	private String day;
 	private int ScheduleAmount;
