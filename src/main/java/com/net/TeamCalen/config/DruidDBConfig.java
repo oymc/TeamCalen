@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-
+/*
+ * 数据库配置类，对应.yml文件中关于datasource属性的配置
+ */
 
 public class DruidDBConfig {
 	private Logger logger=LoggerFactory.getLogger(DruidDBConfig.class);

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.net.TeamCalen.config.ServiceInfo;
+import com.net.TeamCalen.config.SystemApi;
 import com.net.TeamCalen.service.UserService;
 import com.net.TeamCalen.utils.JsonSet;
 
@@ -107,7 +108,7 @@ public class EditUserInformation {
 			String username=userservice.selectNamebyId(user_id);
 			if (!avatar.isEmpty()) {    
 	            try { 
-	            	String path="D://image//uploadAvatar//";
+	            	String path=SystemApi.filePath;//从配置文件中获取
 	            	System.out.println("path="+path);
 	            	String filename=username+avatar.getOriginalFilename().substring(
 	            			avatar.getOriginalFilename().lastIndexOf("."));
